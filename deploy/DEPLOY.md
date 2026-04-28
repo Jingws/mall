@@ -123,6 +123,10 @@ git push -u origin mall_1
 
 ### 3.1 本地：构建 + 打包
 
+> **建议给 zip 加上商城名前缀**（比如 `mall_1-deploy.zip`），避免不同商城互相覆盖。
+
+#### Windows PowerShell
+
 ```powershell
 cd e:\develop\mall
 git checkout mall_1                # 切到目标分支（默认商城跳过这步）
@@ -132,7 +136,30 @@ Compress-Archive -Path dist\* -DestinationPath mall_1-deploy.zip -Force
 Get-ChildItem mall_1-deploy.zip | Select-Object Name, Length
 ```
 
-> **建议给 zip 加上商城名前缀**（比如 `mall_1-deploy.zip`），避免不同商城互相覆盖。
+#### Git Bash (Windows)
+
+> **坑提醒**：Git Bash 自带的 GNU `tar` **不会**真正生成 zip（即使写 `-a -cf foo.zip`，里面还是 tar 数据，`unzip` 会报 `End-of-central-directory signature not found`）。
+> 解决办法：从 Bash 里调用 PowerShell 来打 zip。
+
+```bash
+cd /e/develop/mall
+git checkout mall_1
+
+npm run build
+powershell.exe -Command "Compress-Archive -Path dist\* -DestinationPath mall_1-deploy.zip -Force"
+ls -l mall_1-deploy.zip
+```
+
+#### macOS / Linux
+
+```bash
+cd /path/to/mall
+git checkout mall_1
+
+npm run build
+cd dist && zip -r ../mall_1-deploy.zip . && cd ..
+ls -l mall_1-deploy.zip
+```
 
 ### 3.2 本地：上传到服务器
 
@@ -164,7 +191,7 @@ sudo chown -R www-data:www-data /var/www/$SITE
 
 ```bash
 SITE=mall_1
-DOMAIN=pet.nengzhan.xyz                       # 改成实际域名
+DOMAIN=xxl.gehanghuagong.xyz                       # 改成实际域名
 
 sudo tee /etc/nginx/sites-available/$SITE.conf > /dev/null <<EOF
 server {
@@ -207,7 +234,7 @@ sudo nginx -t && sudo systemctl reload nginx
 #### 3.3.4 HTTPS 证书
 
 ```bash
-sudo certbot --nginx -d pet.nengzhan.xyz
+sudo certbot --nginx -d xxl.gehanghuagong.xyz
 ```
 
 按提示走，最后一项选 `2 (Redirect)`。证书到期前 60 天自动续期。
@@ -248,11 +275,31 @@ ls /var/www/$SITE
 
 ### 本地三连（改配置 → 构建 → 打包）
 
+PowerShell：
+
 ```powershell
 cd e:\develop\mall
 git checkout <分支名>            # 默认 mall 跳过
 npm run build
 Compress-Archive -Path dist\* -DestinationPath <SITE>-deploy.zip -Force
+```
+
+Git Bash (Windows)：
+
+```bash
+cd /e/develop/mall
+git checkout <分支名>
+npm run build
+powershell.exe -Command "Compress-Archive -Path dist\* -DestinationPath <SITE>-deploy.zip -Force"
+```
+
+macOS / Linux：
+
+```bash
+cd /path/to/mall
+git checkout <分支名>
+npm run build
+cd dist && zip -r ../<SITE>-deploy.zip . && cd ..
 ```
 
 ### 服务器三连（验证 → 解压 → 部署）

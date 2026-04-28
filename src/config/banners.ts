@@ -10,21 +10,21 @@ export interface Banner {
 
 export const banners: Banner[] = [
   {
-    title: '春季焕新季',
-    sub: '全场满 199 减 30',
-    bg: 'linear-gradient(120deg,#ff9a9e 0%,#fad0c4 50%,#fbc2eb 100%)',
-    emoji: '🌸',
+    title: '黄金露营季',
+    sub: '满 999 减 200，出发吧',
+    bg: 'linear-gradient(120deg,#1b4332 0%,#2d6a4f 50%,#74c69d 100%)',
+    emoji: '🏕️',
   },
   {
-    title: '数码爆款日',
-    sub: '降噪耳机 ¥899 起',
-    bg: 'linear-gradient(120deg,#667eea 0%,#764ba2 100%)',
-    emoji: '🎧',
+    title: '夜空满月限定',
+    sub: '营地灯立减 ¥80',
+    bg: 'linear-gradient(120deg,#1e3a5f 0%,#2d6a4f 100%)',
+    emoji: '🌙',
   },
   {
-    title: '美食生鲜',
-    sub: '当季新米直降 31%',
-    bg: 'linear-gradient(120deg,#fddb92 0%,#d1fdff 100%)',
-    emoji: '🍚',
+    title: '70L 登山包早鸟价',
+    sub: '专业徒步装备 8 折起',
+    bg: 'linear-gradient(120deg,#e9c46a 0%,#f4a261 100%)',
+    emoji: '🎒',
   },
 ]
