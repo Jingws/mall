@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useCart, type OrderItem } from '../store/CartContext'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useCart } from '../store/CartContext'
+import type { OrderItem, AddressEntry } from '../store/CartContext'
 import { findProduct, siteConfig } from '../config'
 import NavBar from '../components/NavBar'
 import ProductImage from '../components/ProductImage'
@@ -8,11 +9,36 @@ import { showToast } from '../components/Toast'
 
 export default function Checkout() {
   const [search] = useSearchParams()
+  const location = useLocation()
   const from = search.get('from')
   const directId = search.get('id')
   const navigate = useNavigate()
-  const { items, selectedItems, createOrder, clearSelected, removeFromCart } =
+  const { items, selectedItems, createOrder, clearSelected, removeFromCart, addresses } =
     useCart()
+
+  const addressIdFromQuery = search.get('addressId')
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
+    addressIdFromQuery,
+  )
+
+  useEffect(() => {
+    if (addressIdFromQuery) {
+      setSelectedAddressId(addressIdFromQuery)
+      return
+    }
+    if (!selectedAddressId && addresses.length > 0) {
+      setSelectedAddressId(addresses[0].id)
+    }
+  }, [addressIdFromQuery, selectedAddressId, addresses])
+
+  const selectedAddress: AddressEntry | undefined = useMemo(() => {
+    if (!selectedAddressId) return undefined
+    return addresses.find((a) => a.id === selectedAddressId)
+  }, [addresses, selectedAddressId])
+
+  const orderAddress = selectedAddress
+    ? { name: selectedAddress.name, phone: selectedAddress.phone, detail: selectedAddress.detail }
+    : null
 
   const checkoutItems: OrderItem[] = useMemo(() => {
     if (from === 'detail' && directId) {
@@ -29,12 +55,6 @@ export default function Checkout() {
     }, 0)
   }, [checkoutItems])
 
-  const [address] = useState({
-    name: siteConfig.user.name,
-    phone: siteConfig.user.phone,
-    detail: siteConfig.user.address,
-  })
-
   const [pay, setPay] = useState<'wechat' | 'alipay' | 'card'>('wechat')
   const [submitting, setSubmitting] = useState(false)
 
@@ -43,9 +63,13 @@ export default function Checkout() {
       showToast('没有可结算的商品')
       return
     }
+    if (!orderAddress) {
+      showToast('请先选择收货地址')
+      return
+    }
     setSubmitting(true)
     setTimeout(() => {
-      const order = createOrder(checkoutItems, total, address)
+      const order = createOrder(checkoutItems, total, orderAddress)
       if (from === 'detail' && directId) {
         removeFromCart(Number(directId))
       } else {
@@ -60,17 +84,68 @@ export default function Checkout() {
     <div className="checkout-page">
       <NavBar title="确认订单" />
 
-      <div className="address-card">
-        <div className="address-icon">📍</div>
-        <div className="address-info">
-          <div className="address-line1">
-            <span className="address-name">{address.name}</span>
-            <span className="address-phone">{address.phone}</span>
+      {addresses.length === 0 ? (
+        <div className="address-empty-card">
+          <div className="address-empty-title">还没有收货地址</div>
+          <div className="address-empty-sub">先创建收货人/地址，才能提交订单。</div>
+          <button
+            className="primary-btn"
+            onClick={() => {
+              const returnTo = location.pathname + location.search
+              const encoded = encodeURIComponent(returnTo)
+              navigate(`/addresses/new?returnTo=${encoded}`)
+            }}
+          >
+            创建收货地址
+          </button>
+          <div className="address-empty-hint">
+            可先用默认信息（来自配置）创建：{siteConfig.user.name} / {siteConfig.user.phone}
           </div>
-          <div className="address-detail">{address.detail}</div>
         </div>
-        <span className="address-arrow">›</span>
-      </div>
+      ) : (
+        <div className="address-select">
+          <div className="address-select-head">
+            <div className="section-title" style={{ padding: '10px 0 0', margin: 0 }}>
+              <span className="section-bar" />
+              <span>收货人 / 地址</span>
+              <span className="section-tip">提交前必选</span>
+            </div>
+          </div>
+
+          <div className="address-select-list">
+            {addresses.map((a) => (
+              <button
+                key={a.id}
+                type="button"
+                className={'address-select-item' + (a.id === selectedAddress?.id ? ' active' : '')}
+                onClick={() => setSelectedAddressId(a.id)}
+              >
+                <div className="address-select-radio" />
+                <div className="address-select-info">
+                  <div className="address-line1">
+                    <span className="address-name">{a.name}</span>
+                    <span className="address-phone">{a.phone}</span>
+                  </div>
+                  <div className="address-detail">{a.detail}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="address-manage-row">
+            <button
+              className="ghost-btn small"
+              onClick={() => {
+                const returnTo = location.pathname + location.search
+                const encoded = encodeURIComponent(returnTo)
+                navigate(`/addresses?returnTo=${encoded}`)
+              }}
+            >
+              管理收货地址
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="checkout-card">
         <div className="checkout-shop">

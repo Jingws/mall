@@ -7,6 +7,8 @@ import ProductDetail from './pages/ProductDetail'
 import Checkout from './pages/Checkout'
 import PaySuccess from './pages/PaySuccess'
 import Orders from './pages/Orders'
+import Addresses from './pages/Addresses'
+import AddressForm from './pages/AddressForm'
 import TabBar from './components/TabBar'
 import ToastHost from './components/Toast'
 
@@ -25,6 +27,8 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/my" element={<My />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/addresses" element={<Addresses />} />
+          <Route path="/addresses/new" element={<AddressForm />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pay-success" element={<PaySuccess />} />
           <Route path="/orders" element={<Orders />} />
