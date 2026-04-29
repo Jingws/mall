@@ -17,6 +17,7 @@ export default function Category() {
     if (active === 'all') return products
     return products.filter((p) => p.category === active)
   }, [active])
+  const activeCat = categories.find((c) => c.id === active) ?? categories[0]
 
   return (
     <div className="category-page">
@@ -40,6 +41,13 @@ export default function Category() {
         </aside>
 
         <main className="category-main">
+          <div className="category-hero">
+            <div className="category-hero-emoji">{activeCat.emoji}</div>
+            <div className="category-hero-info">
+              <div className="category-hero-title">{activeCat.name}好物</div>
+              <div className="category-hero-sub">共 {list.length} 件可选，持续上新中</div>
+            </div>
+          </div>
           {list.map((p) => (
             <div
               key={p.id}

@@ -7,6 +7,8 @@ export default function Home() {
   const navigate = useNavigate()
   const [bannerIdx, setBannerIdx] = useState(0)
   const [keyword, setKeyword] = useState('')
+  const hour = new Date().getHours()
+  const greeting = hour < 11 ? '早安' : hour < 18 ? '下午好' : '晚上好'
 
   const filtered = useMemo(() => {
     if (!keyword.trim()) return products
@@ -19,11 +21,15 @@ export default function Home() {
   }, [keyword])
 
   const banner = banners[bannerIdx]
+  const picks = products.slice(0, 4)
 
   return (
     <div className="home">
       <div className="home-header">
-        <div className="home-logo">{siteConfig.brand.name}</div>
+        <div className="home-logo-wrap">
+          <div className="home-logo">{siteConfig.brand.name}</div>
+          <div className="home-sub-title">{greeting}，发现你的心选好物</div>
+        </div>
         <div className="home-search">
           <span className="home-search-icon">🔍</span>
           <input
@@ -46,6 +52,10 @@ export default function Home() {
           <div className="banner-cta">立即抢购 ›</div>
         </div>
         <div className="banner-emoji">{banner.emoji}</div>
+        <div className="banner-pill">
+          <span>品牌精选</span>
+          <strong>{siteConfig.brand.slogan}</strong>
+        </div>
         <div className="banner-dots">
           {banners.map((_, i) => (
             <span
@@ -69,6 +79,39 @@ export default function Home() {
         ))}
       </div>
 
+      <div className="home-story-card">
+        <div>
+          <div className="home-story-title">{siteConfig.brand.fullName}</div>
+          <div className="home-story-sub">{siteConfig.brand.slogan}</div>
+        </div>
+        <button className="home-story-btn" onClick={() => navigate('/category')}>
+          进入选购
+        </button>
+      </div>
+
+      <div className="section-title">
+        <span className="section-bar" />
+        <span>编辑精选</span>
+        <span className="section-tip">今日灵感 ✨</span>
+      </div>
+      <div className="pick-scroll">
+        {picks.map((p) => (
+          <div key={p.id} className="pick-card" onClick={() => navigate(`/product/${p.id}`)}>
+            <ProductImage
+              emoji={p.emoji}
+              gradient={p.gradient}
+              image={p.image}
+              alt={p.name}
+              size={88}
+              radius={10}
+              fontSize={38}
+            />
+            <div className="pick-name">{p.name}</div>
+            <div className="pick-price">¥{p.price}</div>
+          </div>
+        ))}
+      </div>
+
       <div className="section-title">
         <span className="section-bar" />
         <span>为你推荐</span>
@@ -79,7 +122,7 @@ export default function Home() {
         {filtered.map((p) => (
           <div
             key={p.id}
-            className="product-card"
+            className="product-card product-card-stagger"
             onClick={() => navigate(`/product/${p.id}`)}
           >
             <div className="product-card-img">
