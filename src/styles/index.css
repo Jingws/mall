@@ -1582,3 +1582,265 @@ li {
     transform: scale(1);
   }
 }
+
+/* ========= Address ========= */
+.address-empty-card {
+  margin: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.address-empty-title {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.address-empty-sub {
+  margin-top: 6px;
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.address-empty-hint {
+  margin-top: 10px;
+  color: var(--text-3);
+  font-size: 12px;
+}
+
+.address-select {
+  margin: 12px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.address-select-head {
+  padding: 12px 14px 0;
+}
+
+.address-select-list {
+  padding: 6px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.address-select-item {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.address-select-item.active {
+  border-color: rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.address-select-radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #ccc;
+  margin-top: 3px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.address-select-item.active .address-select-radio {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.address-select-item.active .address-select-radio::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.address-select-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.address-manage-row {
+  padding: 0 12px 12px;
+}
+
+.addr-manage-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: 72px;
+}
+
+.addr-empty {
+  padding: 88px 16px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.addr-empty-emoji {
+  font-size: 64px;
+  opacity: 0.4;
+}
+
+.addr-empty-title {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.addr-empty-sub {
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.addr-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.addr-row {
+  background: transparent;
+}
+
+.addr-card {
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+}
+
+.addr-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.addr-recipient {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.addr-pin {
+  font-size: 18px;
+}
+
+.addr-name {
+  font-weight: 800;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addr-phone {
+  color: var(--text-2);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.addr-detail {
+  margin-top: 10px;
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.addr-actions {
+  padding: 8px 2px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addr-form-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: 30px;
+}
+
+.form-card {
+  margin: 12px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+.form-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.form-textarea {
+  resize: none;
+}
+
+.form-hint {
+  font-size: 12px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+.addr-bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 72px;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.addr-bottom-btn {
+  width: calc(100% - 24px);
+  display: block;
+  text-align: center;
+}

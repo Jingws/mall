@@ -28,9 +28,17 @@ export interface Order {
   address: { name: string; phone: string; detail: string }
 }
 
+export interface AddressEntry {
+  id: string
+  name: string
+  phone: string
+  detail: string
+}
+
 interface CartContextValue {
   items: CartItem[]
   orders: Order[]
+  addresses: AddressEntry[]
   addToCart: (productId: number, qty?: number) => void
   removeFromCart: (productId: number) => void
   updateQty: (productId: number, qty: number) => void
@@ -40,6 +48,9 @@ interface CartContextValue {
   totalQty: number
   selectedItems: CartItem[]
   selectedTotal: number
+  addAddress: (input: Omit<AddressEntry, 'id'>) => AddressEntry
+  updateAddress: (id: string, input: Omit<AddressEntry, 'id'>) => void
+  removeAddress: (id: string) => void
   createOrder: (
     items: OrderItem[],
     total: number,
@@ -54,19 +65,21 @@ const STORAGE_KEY = 'h5-mall-state-v1'
 interface PersistShape {
   items: CartItem[]
   orders: Order[]
+  addresses: AddressEntry[]
 }
 
 function loadPersist(): PersistShape {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return { items: [], orders: [] }
+    if (!raw) return { items: [], orders: [], addresses: [] }
     const parsed = JSON.parse(raw) as PersistShape
     return {
       items: Array.isArray(parsed.items) ? parsed.items : [],
       orders: Array.isArray(parsed.orders) ? parsed.orders : [],
+      addresses: Array.isArray((parsed as any).addresses) ? (parsed as any).addresses : [],
     }
   } catch {
-    return { items: [], orders: [] }
+    return { items: [], orders: [], addresses: [] }
   }
 }
 
@@ -74,10 +87,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const initial = loadPersist()
   const [items, setItems] = useState<CartItem[]>(initial.items)
   const [orders, setOrders] = useState<Order[]>(initial.orders)
+  const [addresses, setAddresses] = useState<AddressEntry[]>(initial.addresses)
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, orders }))
-  }, [items, orders])
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, orders, addresses }))
+  }, [items, orders, addresses])
 
   const addToCart = (productId: number, qty = 1) => {
     setItems((prev) => {
@@ -153,9 +167,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return order
   }
 
+  const addAddress: CartContextValue['addAddress'] = (input) => {
+    const entry: AddressEntry = {
+      id: 'addr_' + Date.now(),
+      ...input,
+    }
+    setAddresses((prev) => [entry, ...prev])
+    return entry
+  }
+
+  const updateAddress: CartContextValue['updateAddress'] = (id, input) => {
+    setAddresses((prev) => prev.map((a) => (a.id === id ? { ...a, ...input } : a)))
+  }
+
+  const removeAddress: CartContextValue['removeAddress'] = (id) => {
+    setAddresses((prev) => prev.filter((a) => a.id !== id))
+  }
+
   const value: CartContextValue = {
     items,
     orders,
+    addresses,
     addToCart,
     removeFromCart,
     updateQty,
@@ -165,6 +197,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     totalQty,
     selectedItems,
     selectedTotal,
+    addAddress,
+    updateAddress,
+    removeAddress,
     createOrder,
   }
 
