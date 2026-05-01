@@ -1340,12 +1340,18 @@ li {
 .pay-icon {
   width: 28px;
   height: 28px;
-  border-radius: 50%;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  color: #fff;
+  overflow: hidden;
+}
+
+.pay-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .pay-name {
   flex: 1;
