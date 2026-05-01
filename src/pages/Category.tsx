@@ -2,6 +2,21 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { categories, products } from '../config'
 import ProductImage from '../components/ProductImage'
+import Icon, { type IconName } from '../components/Icon'
+
+const CAT_ICON_MAP: Record<string, IconName> = {
+  all: 'sparkle',
+  gear: 'pad',
+  toy: 'cube',
+  audio: 'audio',
+  light: 'light',
+  mech: 'keyboard',
+  phone: 'cpu',
+  wear: 'sparkle',
+  home: 'cube',
+  food: 'fire',
+  beauty: 'star',
+}
 
 export default function Category() {
   const navigate = useNavigate()
@@ -22,65 +37,64 @@ export default function Category() {
   return (
     <div className="category-page">
       <header className="navbar navbar-static">
-        <div className="navbar-title">商品分类</div>
+        <div className="navbar-title">Catalog</div>
       </header>
-      <div className="category-body">
-        <aside className="category-side">
-          {categories.map((c) => (
-            <div
-              key={c.id}
-              className={
-                'category-side-item' + (active === c.id ? ' active' : '')
-              }
-              onClick={() => setActive(c.id)}
-            >
-              <span>{c.name}</span>
-              {active === c.id && <span className="category-side-bar" />}
-            </div>
-          ))}
-        </aside>
 
-        <main className="category-main">
-          <div className="category-hero">
-            <div className="category-hero-emoji">{activeCat.emoji}</div>
-            <div className="category-hero-info">
-              <div className="category-hero-title">{activeCat.name}好物</div>
-              <div className="category-hero-sub">共 {list.length} 件可选，持续上新中</div>
+      <div className="category-tabs">
+        {categories.map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            className={'category-tab' + (active === c.id ? ' active' : '')}
+            onClick={() => setActive(c.id)}
+          >
+            {c.name}
+          </button>
+        ))}
+      </div>
+
+      <div className="category-hero bracket-corners">
+        <div className="category-hero-emoji">
+          <Icon name={CAT_ICON_MAP[activeCat.id] ?? 'cube'} size={22} />
+        </div>
+        <div className="category-hero-info">
+          <div className="category-hero-title">{activeCat.name} module</div>
+          <div className="category-hero-sub">
+            {String(list.length).padStart(2, '0')} items · auto-restock
+          </div>
+        </div>
+      </div>
+
+      <div className="category-grid">
+        {list.map((p) => (
+          <div
+            key={p.id}
+            className="product-card product-card-stagger bracket-corners"
+            onClick={() => navigate(`/product/${p.id}`)}
+          >
+            <div className="product-card-img">
+              <ProductImage
+                emoji={p.emoji}
+                gradient={p.gradient}
+                image={p.image}
+                alt={p.name}
+                fontSize={56}
+                radius={0}
+              />
+              <span className="product-card-tag">{p.tag}</span>
+            </div>
+            <div className="product-card-name">{p.name}</div>
+            <div className="product-card-desc">{p.desc}</div>
+            <div className="product-card-bottom">
+              <div className="product-card-price">
+                <span className="price-symbol">¥</span>
+                <span className="price-num">{p.price}</span>
+              </div>
+              <div className="product-card-sales">{p.sales}+ sold</div>
             </div>
           </div>
-          {list.map((p) => (
-            <div
-              key={p.id}
-              className="row-card"
-              onClick={() => navigate(`/product/${p.id}`)}
-            >
-              <div className="row-card-img">
-                <ProductImage emoji={p.emoji} gradient={p.gradient} image={p.image} alt={p.name} fontSize={48} radius={12} />
-              </div>
-              <div className="row-card-info">
-                <div className="row-card-name">{p.name}</div>
-                <div className="row-card-desc">{p.desc}</div>
-                <div className="row-card-bottom">
-                  <div className="row-card-price">
-                    <span className="price-symbol">¥</span>
-                    <span className="price-num">{p.price}</span>
-                    <span className="price-origin">¥{p.origin}</span>
-                  </div>
-                  <button
-                    className="row-card-btn"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      navigate(`/product/${p.id}`)
-                    }}
-                  >
-                    去看看
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-          {list.length === 0 && <div className="empty">该分类暂无商品</div>}
-        </main>
+        ))}
+        {list.length === 0 && <div className="empty">// no_module.items</div>}
       </div>
     </div>
   )

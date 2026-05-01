@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar'
 import { useCart } from '../store/CartContext'
 import { findProduct, siteConfig } from '../config'
 import ProductImage from '../components/ProductImage'
+import Icon from '../components/Icon'
 
 const formatTime = (ts: number) => {
   const d = new Date(ts)
@@ -18,22 +19,29 @@ export default function Orders() {
 
   return (
     <div className="orders-page">
-      <NavBar title="我的订单" />
+      <NavBar title="My Orders" />
 
       {orders.length === 0 ? (
         <div className="cart-empty">
-          <div className="cart-empty-emoji">📦</div>
-          <div className="cart-empty-text">还没有订单哦</div>
+          <div className="cart-empty-emoji">
+            <Icon name="package" size={36} />
+          </div>
+          <div className="cart-empty-text">// orders.empty</div>
           <button className="primary-btn" onClick={() => navigate('/')}>
-            去下单
+            place order
           </button>
         </div>
       ) : (
         <div className="orders-list">
           {orders.map((o) => (
-            <div key={o.id} className="order-card">
+            <div key={o.id} className="order-card bracket-corners">
               <div className="order-card-head">
-                <span className="order-shop">🏪 {siteConfig.shop.name}</span>
+                <span className="order-shop">
+                  <span className="shop-icon">
+                    <Icon name="store" size={13} />
+                  </span>
+                  {siteConfig.shop.name}
+                </span>
                 <span className="order-status">{o.status}</span>
               </div>
               {o.items.map((it) => {
@@ -51,7 +59,7 @@ export default function Orders() {
                       image={p.image}
                       alt={p.name}
                       size={64}
-                      radius={8}
+                      radius={0}
                       fontSize={32}
                     />
                     <div className="order-item-info">
@@ -69,16 +77,16 @@ export default function Orders() {
                 )
               })}
               <div className="order-card-foot">
-                <div className="order-time">下单时间 {formatTime(o.createdAt)}</div>
+                <div className="order-time">placed · {formatTime(o.createdAt)}</div>
                 <div className="order-total">
-                  共 {o.items.reduce((s, i) => s + i.qty, 0)} 件，实付
+                  {o.items.reduce((s, i) => s + i.qty, 0)} items · paid&nbsp;
                   <span className="price-symbol red">¥</span>
                   <span className="price-num red big">{o.total}</span>
                 </div>
               </div>
               <div className="order-card-actions">
-                <button className="ghost-btn small">查看物流</button>
-                <button className="primary-btn small">再次购买</button>
+                <button className="ghost-btn small">tracking</button>
+                <button className="primary-btn small">re-buy</button>
               </div>
             </div>
           ))}

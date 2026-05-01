@@ -5,6 +5,7 @@ import type { OrderItem, AddressEntry } from '../store/CartContext'
 import { findProduct, siteConfig } from '../config'
 import NavBar from '../components/NavBar'
 import ProductImage from '../components/ProductImage'
+import Icon from '../components/Icon'
 import { showToast } from '../components/Toast'
 import wechatPayIcon from '../static/images/wechatpay.png'
 import alipayIcon from '../static/images/alipay.png'
@@ -84,12 +85,12 @@ export default function Checkout() {
 
   return (
     <div className="checkout-page">
-      <NavBar title="确认订单" />
+      <NavBar title="Confirm Order" />
 
       {addresses.length === 0 ? (
-        <div className="address-empty-card">
-          <div className="address-empty-title">还没有收货地址</div>
-          <div className="address-empty-sub">先创建收货人/地址，才能提交订单。</div>
+        <div className="address-empty-card bracket-corners">
+          <div className="address-empty-title">// address.required</div>
+          <div className="address-empty-sub">先创建一个收货人/地址，才能继续结算。</div>
           <button
             className="primary-btn"
             onClick={() => {
@@ -98,19 +99,18 @@ export default function Checkout() {
               navigate(`/addresses/new?returnTo=${encoded}`)
             }}
           >
-            创建收货地址
+            create address
           </button>
           <div className="address-empty-hint">
-            可先用默认信息（来自配置）创建：{siteConfig.user.name} / {siteConfig.user.phone}
+            可先用预设：{siteConfig.user.name} / {siteConfig.user.phone}
           </div>
         </div>
       ) : (
-        <div className="address-select">
+        <div className="address-select bracket-corners">
           <div className="address-select-head">
-            <div className="section-title" style={{ padding: '10px 0 0', margin: 0 }}>
-              <span className="section-bar" />
-              <span>收货人 / 地址</span>
-              <span className="section-tip">提交前必选</span>
+            <div className="section-title">
+              ship to
+              <span className="section-tip">required</span>
             </div>
           </div>
 
@@ -143,15 +143,17 @@ export default function Checkout() {
                 navigate(`/addresses?returnTo=${encoded}`)
               }}
             >
-              管理收货地址
+              manage
             </button>
           </div>
         </div>
       )}
 
-      <div className="checkout-card">
+      <div className="checkout-card bracket-corners">
         <div className="checkout-shop">
-          <span className="shop-icon">🏪</span>
+          <span className="shop-icon">
+            <Icon name="store" size={14} />
+          </span>
           <span>{siteConfig.shop.name}</span>
         </div>
         {checkoutItems.map((i) => {
@@ -165,7 +167,7 @@ export default function Checkout() {
                 image={p.image}
                 alt={p.name}
                 size={72}
-                radius={10}
+                radius={0}
                 fontSize={36}
               />
               <div className="checkout-item-info">
@@ -183,18 +185,18 @@ export default function Checkout() {
           )
         })}
         <div className="checkout-row">
-          <span>配送方式</span>
-          <span className="muted">顺丰速运 · 包邮</span>
+          <span>delivery</span>
+          <span className="muted">同城极速 · 包邮</span>
         </div>
         <div className="checkout-row">
-          <span>订单备注</span>
-          <span className="muted">无</span>
+          <span>note</span>
+          <span className="muted">none</span>
         </div>
       </div>
 
-      <div className="checkout-card">
+      <div className="checkout-card bracket-corners">
         <div className="checkout-row pay-row">
-          <span>支付方式</span>
+          <span>// payment</span>
         </div>
         <div
           className={'pay-option' + (pay === 'wechat' ? ' active' : '')}
@@ -203,7 +205,7 @@ export default function Checkout() {
           <span className="pay-icon">
             <img src={wechatPayIcon} alt="微信支付" className="pay-logo" />
           </span>
-          <span className="pay-name">微信支付</span>
+          <span className="pay-name">WeChat Pay</span>
           <span className="pay-radio" />
         </div>
         <div
@@ -213,29 +215,29 @@ export default function Checkout() {
           <span className="pay-icon">
             <img src={alipayIcon} alt="支付宝" className="pay-logo" />
           </span>
-          <span className="pay-name">支付宝</span>
+          <span className="pay-name">Alipay</span>
           <span className="pay-radio" />
         </div>
       </div>
 
-      <div className="checkout-card">
+      <div className="checkout-card bracket-corners">
         <div className="checkout-row">
-          <span>商品金额</span>
+          <span>subtotal</span>
           <span>¥{total}</span>
         </div>
         <div className="checkout-row">
-          <span>运费</span>
+          <span>shipping</span>
           <span>¥0</span>
         </div>
         <div className="checkout-row">
-          <span>优惠</span>
-          <span style={{ color: 'var(--primary)' }}>-¥0</span>
+          <span>discount</span>
+          <span style={{ color: 'var(--accent)' }}>-¥0</span>
         </div>
       </div>
 
       <div className="checkout-bar">
         <div className="checkout-bar-total">
-          实付：
+          total&nbsp;
           <span className="price-symbol red">¥</span>
           <span className="price-num big red">{total}</span>
         </div>
@@ -244,7 +246,7 @@ export default function Checkout() {
           disabled={submitting}
           onClick={submit}
         >
-          {submitting ? '提交中...' : '提交订单'}
+          {submitting ? 'processing...' : 'submit'}
         </button>
       </div>
     </div>

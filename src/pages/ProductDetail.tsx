@@ -4,6 +4,7 @@ import { findProduct, siteConfig } from '../config'
 import { useCart } from '../store/CartContext'
 import NavBar from '../components/NavBar'
 import ProductImage from '../components/ProductImage'
+import Icon from '../components/Icon'
 import { showToast } from '../components/Toast'
 
 export default function ProductDetail() {
@@ -19,7 +20,7 @@ export default function ProductDetail() {
       <div className="page-center">
         <NavBar title="商品详情" />
         <div className="empty" style={{ padding: 80 }}>
-          商品不存在 🥲
+          // item.not_found
         </div>
       </div>
     )
@@ -37,6 +38,8 @@ export default function ProductDetail() {
     }
   }
 
+  const skuId = 'SKU-' + String(product.id).padStart(4, '0')
+
   return (
     <div className="detail-page">
       <NavBar title="" transparent />
@@ -51,63 +54,85 @@ export default function ProductDetail() {
           radius={0}
         />
         <div className="detail-banner-tag">{product.tag}</div>
+        <div className="detail-banner-id">
+          <span className="dot" />
+          {skuId}
+        </div>
       </div>
 
-      <div className="detail-card">
+      <div className="detail-card bracket-corners">
         <div className="detail-price-row">
           <div className="detail-price">
             <span className="price-symbol">¥</span>
             <span className="price-num big">{product.price}</span>
             <span className="price-origin">¥{product.origin}</span>
           </div>
-          <div className="detail-sales">{product.sales}+ 人付款</div>
+          <div className="detail-sales">{product.sales}+ sold</div>
         </div>
         <div className="detail-name">{product.name}</div>
         <div className="detail-desc">{product.desc}</div>
         <div className="detail-services">
           {siteConfig.services.map((s) => (
-            <span key={s}>{s}</span>
+            <span key={s}>{s.replace(/^·\s*/, '')}</span>
           ))}
         </div>
       </div>
 
-      <div className="detail-card">
-        <div className="section-title">
-          <span className="section-bar" />
-          <span>商品详情</span>
+      <div className="detail-card bracket-corners">
+        <div className="section-title" style={{ padding: '0 0 8px' }}>
+          spec sheet
+          <span className="section-tip">
+            <Icon name="cpu" size={11} /> verified
+          </span>
         </div>
         <ul className="detail-list">
           {product.detail.map((d, i) => (
             <li key={i}>
-              <span className="detail-list-dot">●</span>
+              <span className="detail-list-dot">
+                {String(i + 1).padStart(2, '0')}
+              </span>
               {d}
             </li>
           ))}
         </ul>
-        <div className="detail-image-block" style={{ background: product.gradient }}>
+        <div
+          className="detail-image-block"
+          style={{ background: product.gradient }}
+        >
           <ProductImage
             emoji={product.emoji}
             gradient={product.gradient}
             image={product.image}
             alt={product.name}
             fontSize={96}
-            radius={10}
+            radius={0}
           />
         </div>
       </div>
 
       <div className="detail-bar">
-        <div className="detail-bar-icon" onClick={() => navigate('/')}>
-          <div>🏪</div>
-          <div>店铺</div>
-        </div>
-        <div className="detail-bar-icon" onClick={() => navigate('/cart')}>
-          <div style={{ position: 'relative', display: 'inline-block' }}>
-            🛒
-            {totalQty > 0 && <span className="bar-badge">{totalQty}</span>}
-          </div>
-          <div>购物车</div>
-        </div>
+        <button
+          type="button"
+          className="detail-bar-icon"
+          onClick={() => navigate('/')}
+        >
+          <span className="detail-bar-icon-svg">
+            <Icon name="store" size={18} />
+          </span>
+          <span className="detail-bar-icon-label">shop</span>
+        </button>
+        <button
+          type="button"
+          className="detail-bar-icon"
+          onClick={() => navigate('/cart')}
+          style={{ position: 'relative' }}
+        >
+          <span className="detail-bar-icon-svg">
+            <Icon name="cart" size={18} />
+          </span>
+          <span className="detail-bar-icon-label">cart</span>
+          {totalQty > 0 && <span className="bar-badge">{totalQty}</span>}
+        </button>
         <button
           className="detail-bar-btn cart"
           onClick={() => {
@@ -115,7 +140,7 @@ export default function ProductDetail() {
             setShowSku('cart')
           }}
         >
-          加入购物车
+          add to cart
         </button>
         <button
           className="detail-bar-btn buy"
@@ -124,7 +149,7 @@ export default function ProductDetail() {
             setShowSku('buy')
           }}
         >
-          立即购买
+          buy now
         </button>
       </div>
 
@@ -138,7 +163,7 @@ export default function ProductDetail() {
                 image={product.image}
                 alt={product.name}
                 size={88}
-                radius={10}
+                radius={0}
                 fontSize={42}
               />
               <div className="sku-head-info">
@@ -146,21 +171,30 @@ export default function ProductDetail() {
                   <span className="price-symbol">¥</span>
                   <span className="price-num big">{product.price}</span>
                 </div>
-                <div className="sku-stock">库存充足 · 已选 1 件</div>
+                <div className="sku-stock">stock_ok · {skuId}</div>
               </div>
-              <span className="sku-close" onClick={() => setShowSku(null)}>×</span>
+              <button
+                type="button"
+                className="sku-close"
+                onClick={() => setShowSku(null)}
+                aria-label="关闭"
+              >
+                <Icon name="close" size={14} />
+              </button>
             </div>
             <div className="sku-section">
-              <div className="sku-label">规格</div>
+              <div className="sku-label">variant</div>
               <div className="sku-options">
-                <span className="sku-option active">标准款</span>
-                <span className="sku-option">尊享款</span>
+                <span className="sku-option active">standard</span>
+                <span className="sku-option">prestige</span>
               </div>
             </div>
             <div className="sku-section">
-              <div className="sku-label">数量</div>
+              <div className="sku-label">quantity</div>
               <div className="qty-control">
-                <button onClick={() => setQty((q) => Math.max(1, q - 1))}>-</button>
+                <button onClick={() => setQty((q) => Math.max(1, q - 1))}>
+                  <Icon name="minus" size={14} />
+                </button>
                 <input
                   type="number"
                   value={qty}
@@ -168,14 +202,16 @@ export default function ProductDetail() {
                     setQty(Math.max(1, Number(e.target.value) || 1))
                   }
                 />
-                <button onClick={() => setQty((q) => q + 1)}>+</button>
+                <button onClick={() => setQty((q) => q + 1)}>
+                  <Icon name="plus" size={14} />
+                </button>
               </div>
             </div>
             <button
               className={'sku-confirm ' + (showSku === 'buy' ? 'buy' : 'cart')}
               onClick={confirmSku}
             >
-              {showSku === 'buy' ? '立即购买' : '加入购物车'}
+              {showSku === 'buy' ? 'execute purchase' : 'add to cart'}
             </button>
           </div>
         </div>

@@ -52,11 +52,11 @@ export default function AddressForm() {
 
   return (
     <div className="addr-form-page">
-      <NavBar title="新增收货地址" />
+      <NavBar title="Create Address" />
 
-      <div className="form-card">
+      <div className="form-card bracket-corners">
         <div className="form-field">
-          <div className="form-label">收货人</div>
+          <div className="form-label">recipient</div>
           <input
             className="form-input"
             value={name}
@@ -66,7 +66,7 @@ export default function AddressForm() {
         </div>
 
         <div className="form-field">
-          <div className="form-label">手机</div>
+          <div className="form-label">phone</div>
           <input
             className="form-input"
             value={phone}
@@ -77,7 +77,7 @@ export default function AddressForm() {
         </div>
 
         <div className="form-field">
-          <div className="form-label">收货地址</div>
+          <div className="form-label">delivery point</div>
           <textarea
             className="form-input form-textarea"
             value={detail}
@@ -88,14 +88,13 @@ export default function AddressForm() {
         </div>
 
         <button className="primary-btn" disabled={submitting} onClick={submit}>
-          {submitting ? '保存中...' : '保存并返回'}
+          {submitting ? 'saving...' : 'save & return'}
         </button>
 
         <div className="form-hint">
-          提交后会自动返回到订单页并选中该地址。
+          // 提交后会自动返回上一页并选中该地址
         </div>
       </div>
     </div>
   )
 }
-

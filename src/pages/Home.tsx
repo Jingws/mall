@@ -2,13 +2,30 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { products, categories, banners, siteConfig } from '../config'
 import ProductImage from '../components/ProductImage'
+import Icon, { type IconName } from '../components/Icon'
+
+const CAT_ICON_MAP: Record<string, IconName> = {
+  all: 'sparkle',
+  gear: 'pad',
+  toy: 'cube',
+  audio: 'audio',
+  light: 'light',
+  mech: 'keyboard',
+  // 兼容旧分类 id
+  phone: 'cpu',
+  wear: 'sparkle',
+  home: 'cube',
+  food: 'fire',
+  beauty: 'star',
+}
 
 export default function Home() {
   const navigate = useNavigate()
   const [bannerIdx, setBannerIdx] = useState(0)
   const [keyword, setKeyword] = useState('')
   const hour = new Date().getHours()
-  const greeting = hour < 11 ? '早安' : hour < 18 ? '下午好' : '晚上好'
+  const greeting =
+    hour < 6 ? 'NIGHT_OPS' : hour < 12 ? 'MORNING_OPS' : hour < 18 ? 'DAY_OPS' : 'NIGHT_OPS'
 
   const filtered = useMemo(() => {
     if (!keyword.trim()) return products
@@ -22,23 +39,32 @@ export default function Home() {
 
   const banner = banners[bannerIdx]
   const picks = products.slice(0, 4)
+  const stamp = String(Math.floor(Date.now() / 1000)).slice(-6)
 
   return (
     <div className="home">
       <div className="home-header">
-        <div className="home-logo-wrap">
-          <div className="home-logo">{siteConfig.brand.name}</div>
-          <div className="home-sub-title">{greeting}，发现你的心选好物</div>
+        <div className="home-brand">
+          <div className="home-logo-mark">{siteConfig.brand.name}</div>
+          <div>
+            <div className="home-logo-name">{siteConfig.brand.name}</div>
+            <div className="home-logo-sub">{greeting} · pilot ready</div>
+          </div>
         </div>
-        <div className="home-search">
-          <span className="home-search-icon">🔍</span>
-          <input
-            placeholder="搜索心仪好物"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
+        <div className="home-status" aria-label="online">
+          <span className="dot" />
+          online
         </div>
-        <div className="home-msg">💬</div>
+      </div>
+
+      <div className="home-search">
+        <span className="home-search-prefix mono">$</span>
+        <input
+          placeholder="search the matrix..."
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <Icon name="search" size={18} style={{ color: 'var(--text-3)' }} />
       </div>
 
       <div
@@ -47,15 +73,16 @@ export default function Home() {
         onClick={() => setBannerIdx((i) => (i + 1) % banners.length)}
       >
         <div className="banner-text">
+          <div className="banner-meta">
+            mission_{String(bannerIdx + 1).padStart(2, '0')} · {stamp}
+          </div>
           <div className="banner-title">{banner.title}</div>
           <div className="banner-sub">{banner.sub}</div>
-          <div className="banner-cta">立即抢购 ›</div>
+          <div className="banner-cta">
+            engage <Icon name="arrow-right" size={12} />
+          </div>
         </div>
         <div className="banner-emoji">{banner.emoji}</div>
-        <div className="banner-pill">
-          <span>品牌精选</span>
-          <strong>{siteConfig.brand.slogan}</strong>
-        </div>
         <div className="banner-dots">
           {banners.map((_, i) => (
             <span
@@ -66,33 +93,43 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="quick-cats">
+      <div className="cat-chips">
         {categories.slice(1).map((c) => (
           <div
             key={c.id}
-            className="quick-cat"
+            className="cat-chip"
             onClick={() => navigate(`/category?cat=${c.id}`)}
           >
-            <div className="quick-cat-icon">{c.emoji}</div>
-            <div className="quick-cat-name">{c.name}</div>
+            <span className="cat-chip-icon">
+              <Icon name={CAT_ICON_MAP[c.id] ?? 'cube'} size={14} />
+            </span>
+            <span>{c.name}</span>
           </div>
         ))}
       </div>
 
       <div className="home-story-card">
-        <div>
+        <div className="home-story-mark">
+          <Icon name="bolt" size={22} />
+        </div>
+        <div className="home-story-info">
           <div className="home-story-title">{siteConfig.brand.fullName}</div>
           <div className="home-story-sub">{siteConfig.brand.slogan}</div>
         </div>
-        <button className="home-story-btn" onClick={() => navigate('/category')}>
-          进入选购
+        <button
+          type="button"
+          className="home-story-btn"
+          onClick={() => navigate('/category')}
+        >
+          enter
         </button>
       </div>
 
       <div className="section-title">
-        <span className="section-bar" />
-        <span>编辑精选</span>
-        <span className="section-tip">今日灵感 ✨</span>
+        Curated drop
+        <span className="section-tip">
+          <Icon name="sparkle" size={11} /> editor pick
+        </span>
       </div>
       <div className="pick-scroll">
         {picks.map((p) => (
@@ -102,31 +139,42 @@ export default function Home() {
               gradient={p.gradient}
               image={p.image}
               alt={p.name}
-              size={88}
-              radius={10}
+              size={112}
+              radius={0}
               fontSize={38}
             />
             <div className="pick-name">{p.name}</div>
-            <div className="pick-price">¥{p.price}</div>
+            <div className="pick-meta">
+              <span className="pick-price">¥{p.price}</span>
+              <span className="pick-tag">{p.tag}</span>
+            </div>
           </div>
         ))}
       </div>
 
       <div className="section-title">
-        <span className="section-bar" />
-        <span>为你推荐</span>
-        <span className="section-tip">猜你喜欢 🔥</span>
+        All Items
+        <span className="section-tip">
+          <Icon name="fire" size={11} /> trending
+        </span>
       </div>
 
       <div className="product-grid">
         {filtered.map((p) => (
           <div
             key={p.id}
-            className="product-card product-card-stagger"
+            className="product-card product-card-stagger bracket-corners"
             onClick={() => navigate(`/product/${p.id}`)}
           >
             <div className="product-card-img">
-              <ProductImage emoji={p.emoji} gradient={p.gradient} image={p.image} alt={p.name} fontSize={64} radius={14} />
+              <ProductImage
+                emoji={p.emoji}
+                gradient={p.gradient}
+                image={p.image}
+                alt={p.name}
+                fontSize={64}
+                radius={0}
+              />
               <span className="product-card-tag">{p.tag}</span>
             </div>
             <div className="product-card-name">{p.name}</div>
@@ -136,12 +184,12 @@ export default function Home() {
                 <span className="price-symbol">¥</span>
                 <span className="price-num">{p.price}</span>
               </div>
-              <div className="product-card-sales">{p.sales}+ 人付款</div>
+              <div className="product-card-sales">{p.sales}+ sold</div>
             </div>
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="empty">没有找到相关商品 🥲</div>
+          <div className="empty">// no_match.found</div>
         )}
       </div>
     </div>
