@@ -6,6 +6,8 @@ import { findProduct, siteConfig } from '../config'
 import NavBar from '../components/NavBar'
 import ProductImage from '../components/ProductImage'
 import { showToast } from '../components/Toast'
+import wechatPayIcon from '../static/images/wechatpay.png'
+import alipayIcon from '../static/images/alipay.png'
 
 export default function Checkout() {
   const [search] = useSearchParams()
@@ -55,7 +57,7 @@ export default function Checkout() {
     }, 0)
   }, [checkoutItems])
 
-  const [pay, setPay] = useState<'wechat' | 'alipay' | 'card'>('wechat')
+  const [pay, setPay] = useState<'wechat' | 'alipay'>('wechat')
   const [submitting, setSubmitting] = useState(false)
 
   const submit = () => {
@@ -198,7 +200,9 @@ export default function Checkout() {
           className={'pay-option' + (pay === 'wechat' ? ' active' : '')}
           onClick={() => setPay('wechat')}
         >
-          <span className="pay-icon" style={{ background: '#1aad19' }}>💚</span>
+          <span className="pay-icon">
+            <img src={wechatPayIcon} alt="微信支付" className="pay-logo" />
+          </span>
           <span className="pay-name">微信支付</span>
           <span className="pay-radio" />
         </div>
@@ -206,16 +210,10 @@ export default function Checkout() {
           className={'pay-option' + (pay === 'alipay' ? ' active' : '')}
           onClick={() => setPay('alipay')}
         >
-          <span className="pay-icon" style={{ background: '#1677ff' }}>💙</span>
+          <span className="pay-icon">
+            <img src={alipayIcon} alt="支付宝" className="pay-logo" />
+          </span>
           <span className="pay-name">支付宝</span>
-          <span className="pay-radio" />
-        </div>
-        <div
-          className={'pay-option' + (pay === 'card' ? ' active' : '')}
-          onClick={() => setPay('card')}
-        >
-          <span className="pay-icon" style={{ background: '#ff7a45' }}>💳</span>
-          <span className="pay-name">银行卡</span>
           <span className="pay-radio" />
         </div>
       </div>
