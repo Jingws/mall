@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
+import Icon from './Icon'
 
 interface NavBarProps {
   title: string
@@ -19,7 +20,7 @@ export default function NavBar({ title, back = true, right, transparent }: NavBa
             onClick={() => navigate(-1)}
             aria-label="返回"
           >
-            ‹
+            <Icon name="back" size={18} />
           </button>
         )}
       </div>

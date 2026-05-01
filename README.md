@@ -1,34 +1,31 @@
-# 悠选商城 (H5 Mall)
+# 星野潮玩 STARFIELD · H5 Mall (Cyberpunk HUD 模板)
 
-一个纯静态的 H5 移动端商城 Demo，使用 **React 18 + Vite + TypeScript + React Router** 构建。
+一个**暗黑赛博朋克 HUD 风格**的 H5 移动端商城 Demo，使用 **React 18 + Vite + TypeScript + React Router** 构建。
 不依赖任何后端接口、不需要登录注册、不对接任何支付，全流程在前端通过模拟数据走通。
+
+> 本项目同时是一份**模板**：所有差异化内容（品牌名、主题色、商品、Banner）集中在 `src/config/`，
+> 改 3 个文件即可派生出风格完全不同的下一个商城。
 
 ## 功能一览
 
-- 🏠 **首页**：轮播 Banner、快捷分类入口、商品搜索、瀑布流商品列表
-- 🗂️ **分类页**：左侧分类导航 + 右侧商品列表
-- 📦 **商品详情**：渐变大图、价格、卖点、SKU 弹层（规格 + 数量）
-- 🛒 **购物车**：勾选、增减、删除、全选、合计
-- 📝 **确认订单**：地址、商品、配送、支付方式（微信 / 支付宝 / 银行卡）
-- ✅ **支付成功**：模拟支付结果，跳转订单或继续逛逛
-- 👤 **我的**：用户信息、订单入口、常用功能
-- 📜 **订单列表**：本地保存的历史订单，下次打开仍在
+- 首页：HUD 风顶栏（品牌印章 + 在线状态 + 终端式搜索）、霓虹切角 Banner、横向分类 chips、Curated drop、网格商品列表
+- 分类：顶部水平 chip 标签栏 + 2 列暗色切角卡片网格（替代传统左右分栏）
+- 商品详情：满屏渐变 hero + SKU 序列号、霓虹规格表 + HUD 底部双 CTA
+- 购物车：暗色切角卡片 + 浮动胶囊结算栏
+- 结算：HUD 卡片 + 等宽字体行、电光支付选项
+- 支付成功：HUD 终端式 `TRANSACTION OK` + ASCII art 回执
+- 我的：`PILOT-ID` 玻璃卡 + 4 项任务统计 + 线性菜单
+- 订单：暗黑切角卡片 + 单色霓虹状态 chip
+- 收货地址：终端表单（`> recipient` `> phone` `> delivery point`）
 
-> 购物车与订单数据通过 `localStorage` 持久化，刷新页面不会丢失。
+> 购物车与订单数据通过 `localStorage` 持久化。
 
 ## 快速开始
 
 ```bash
-# 安装依赖（建议 Node 18+）
 npm install
-
-# 启动开发服务（默认 http://localhost:5173）
-npm run dev
-
-# 构建生产版本
+npm run dev      # http://localhost:5173
 npm run build
-
-# 本地预览构建产物
 npm run preview
 ```
 
@@ -46,33 +43,32 @@ src/config/
 ```
 
 主题色会在运行时注入到 CSS 变量，**改一行 `theme.primary`，全站自动换肤**。
+模板级布局（暗黑 HUD / 浅色暖色等）则通过 `src/styles/index.css` 与 `src/components/` 控制。
 
 ## 部署到服务器
 
-完整部署手册见 [`deploy/DEPLOY.md`](./deploy/DEPLOY.md)，覆盖：
-
-- 如何 fork 一个新商城分支
-- 如何把 `mall / mall_1 / mall_2 ...` 部署到同一台机器的不同目录、不同域名
-- 一份命令模板适配所有商城（替换变量即可）
-- 首次部署、日常更新、回滚、排错
+完整部署手册见 [`deploy/DEPLOY.md`](./deploy/DEPLOY.md)。
 
 ## 目录结构
 
 ```
 src/
 ├── config/          # 站点 / 主题 / 商品 / Banner 配置（差异化层）
-├── components/      # 通用组件（NavBar、TabBar、ProductImage、Toast）
+├── components/      # 通用组件（Icon / NavBar / TabBar / ProductImage / Toast）
 ├── pages/           # 各路由页面
 ├── store/           # 购物车 + 订单状态（Context + localStorage）
-├── styles/          # 全局样式（颜色全部走 CSS 变量）
+├── styles/          # 全局样式（暗黑 HUD，颜色全部走 CSS 变量）
 ├── App.tsx          # 路由与布局
 └── main.tsx         # 应用入口（注入主题、设置 title）
 ```
 
 ## 设计说明
 
-- **商品图片**：使用 Unsplash CDN 的实物图，加载失败会自动回退到 emoji + 渐变色作占位。
-- **路由**：使用 `HashRouter`，可直接 `npm run build` 丢到任意静态服务器即可访问，刷新不会 404。
-- **移动端适配**：最大宽度 480px 居中显示，桌面端打开依然有移动端的视觉体验。
+- **整体语言**：深紫黑底 + 霓虹紫青 + 切角卡片 + `//` 注释式区块标题 + 等宽字号显示价格 / ID / 状态
+- **图标**：自研 30+ SVG 线性图标（`src/components/Icon.tsx`）替代 emoji
+- **TabBar**：浮动胶囊，活跃项有顶部霓虹高光条
+- **商品图片**：使用 Unsplash CDN 实物图，加载失败自动回退到 emoji + 渐变占位
+- **路由**：`HashRouter`，`npm run build` 后丢到任意静态服务器即可访问，刷新不会 404
+- **移动端适配**：最大宽度 480px 居中显示
 
-Enjoy shopping! 🛍️
+Power on. Engage.
