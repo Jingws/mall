@@ -10,21 +10,21 @@ export interface Banner {
 
 export const banners: Banner[] = [
   {
-    title: '春季焕新季',
-    sub: '全场满 199 减 30',
-    bg: 'linear-gradient(120deg,#ff9a9e 0%,#fad0c4 50%,#fbc2eb 100%)',
-    emoji: '🌸',
+    title: '黑色游戏季',
+    sub: '装备整套立减 500 起',
+    bg: 'linear-gradient(120deg,#1a0033 0%,#4c1d95 50%,#831843 100%)',
+    emoji: '🎮',
   },
   {
-    title: '数码爆款日',
-    sub: '降噪耳机 ¥899 起',
-    bg: 'linear-gradient(120deg,#667eea 0%,#764ba2 100%)',
-    emoji: '🎧',
+    title: '机甲新品发售',
+    sub: '十二月限定 · 全球编号 999',
+    bg: 'linear-gradient(120deg,#0f172a 0%,#1e3a8a 50%,#06ffd5 100%)',
+    emoji: '🤖',
   },
   {
-    title: '美食生鲜',
-    sub: '当季新米直降 31%',
-    bg: 'linear-gradient(120deg,#fddb92 0%,#d1fdff 100%)',
-    emoji: '🍚',
+    title: '桌搭工位 ALL-IN-ONE',
+    sub: '一站式打造你的赛博工位',
+    bg: 'linear-gradient(120deg,#831843 0%,#a855f7 50%,#06ffd5 100%)',
+    emoji: '💻',
   },
 ]

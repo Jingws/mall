@@ -5,11 +5,11 @@
 
 export interface SiteConfig {
   brand: {
-    /** 短品牌名，TabBar/header logo 用，如 "悠选" */
+    /** 短品牌名，TabBar/header logo 用，如 "星野" */
     name: string
-    /** 完整品牌名，"我的"页脚等用，如 "悠选商城" */
+    /** 完整品牌名，"我的"页脚等用，如 "星野潮玩" */
     fullName: string
-    /** 一句话 slogan，如 "让购物变简单" */
+    /** 一句话 slogan，如 "重启你的次元" */
     slogan: string
     /** 浏览器 tab 标题 */
     title: string
@@ -64,35 +64,35 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   brand: {
-    name: '悠选',
-    fullName: '悠选商城',
-    slogan: '让购物变简单',
-    title: '悠选商城',
+    name: '星野',
+    fullName: '星野潮玩',
+    slogan: '重启你的次元',
+    title: '星野 · 潮玩黑科技',
   },
   theme: {
-    primary: '#ff4d4f',
-    primaryDark: '#d9363e',
-    accent: '#ffa940',
-    primaryGradient: 'linear-gradient(135deg, #ff7875, #ff4d4f)',
-    accentGradient: 'linear-gradient(135deg, #ffc069, #ffa940)',
-    headerGradient: 'linear-gradient(180deg, #ff4d4f 0%, #ff7a7a 100%)',
-    profileGradient: 'linear-gradient(135deg, #ff7875 0%, #ff4d4f 100%)',
-    primaryShadow: 'rgba(255, 77, 79, 0.3)',
-    successGradient: 'linear-gradient(135deg, #52c41a, #389e0d)',
+    primary: '#a855f7',
+    primaryDark: '#7e22ce',
+    accent: '#06ffd5',
+    primaryGradient: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
+    accentGradient: 'linear-gradient(135deg, #06ffd5 0%, #00b4ff 100%)',
+    headerGradient: 'linear-gradient(135deg, #1a0033 0%, #4c1d95 55%, #831843 100%)',
+    profileGradient: 'linear-gradient(135deg, #1a0033 0%, #4c1d95 50%, #be185d 100%)',
+    primaryShadow: 'rgba(168, 85, 247, 0.45)',
+    successGradient: 'linear-gradient(135deg, #06ffd5 0%, #00b4ff 100%)',
   },
   user: {
-    name: '张小悠',
-    phone: '138 **** 8888',
-    address: '上海市 黄浦区 世纪大道 100 号 12 栋 3 单元',
-    avatarChar: '悠',
-    vipLevel: 'VIP1',
-    userId: '8888 8888',
+    name: '林夜',
+    phone: '159 **** 0721',
+    address: '深圳市 南山区 科技园南区 9 号楼 22F · 量子工位',
+    avatarChar: '夜',
+    vipLevel: 'PRO',
+    userId: 'NX-2077',
   },
-  services: ['· 顺丰包邮', '· 七天无理由', '· 假一赔十'],
+  services: ['· 极速发货', '· 30 天质保', '· 假一赔三'],
   shop: {
-    name: '悠选官方旗舰店',
+    name: '星野官方实验室',
   },
-  pageFooter: '— 悠选商城 · 让购物变简单 —',
+  pageFooter: '— 星野潮玩 · 重启你的次元 —',
 }
 
 /**
