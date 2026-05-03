@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCart } from '../store/CartContext'
 import { findProduct } from '../config'
 import ProductImage from '../components/ProductImage'
+import Icon from '../components/Icon'
 import { showToast } from '../components/Toast'
 
 export default function Cart() {
@@ -29,15 +30,17 @@ export default function Cart() {
   return (
     <div className="cart-page">
       <header className="navbar navbar-static">
-        <div className="navbar-title">购物车</div>
+        <div className="navbar-title">Cart</div>
       </header>
 
       {items.length === 0 ? (
         <div className="cart-empty">
-          <div className="cart-empty-emoji">🛒</div>
-          <div className="cart-empty-text">购物车空空如也</div>
+          <div className="cart-empty-emoji">
+            <Icon name="cart" size={36} />
+          </div>
+          <div className="cart-empty-text">// cart_buffer.empty</div>
           <button className="primary-btn" onClick={() => navigate('/')}>
-            去逛逛
+            browse loot
           </button>
         </div>
       ) : (
@@ -59,7 +62,7 @@ export default function Cart() {
                       image={p.image}
                       alt={p.name}
                       size={80}
-                      radius={10}
+                      radius={0}
                       fontSize={40}
                     />
                   </div>
@@ -75,25 +78,27 @@ export default function Cart() {
                         <button
                           onClick={() => updateQty(item.id, item.qty - 1)}
                         >
-                          -
+                          <Icon name="minus" size={12} />
                         </button>
                         <span>{item.qty}</span>
                         <button
                           onClick={() => updateQty(item.id, item.qty + 1)}
                         >
-                          +
+                          <Icon name="plus" size={12} />
                         </button>
                       </div>
                     </div>
                   </div>
                   <button
+                    type="button"
                     className="cart-item-del"
+                    aria-label="删除"
                     onClick={() => {
                       removeFromCart(item.id)
                       showToast('已删除')
                     }}
                   >
-                    🗑
+                    <Icon name="trash" size={18} />
                   </button>
                 </div>
               )
@@ -105,14 +110,14 @@ export default function Cart() {
               className={'check' + (allSelected ? ' active' : '')}
               onClick={() => toggleSelectAll(!allSelected)}
             />
-            <span className="cart-bar-all">全选</span>
+            <span className="cart-bar-all">all</span>
             <div className="cart-bar-total">
-              合计：
+              total&nbsp;
               <span className="price-symbol">¥</span>
               <span className="price-num big">{selectedTotal}</span>
             </div>
             <button className="cart-bar-btn" onClick={goCheckout}>
-              结算 ({selectedItems.reduce((s, i) => s + i.qty, 0)})
+              pay ({selectedItems.reduce((s, i) => s + i.qty, 0)})
             </button>
           </div>
         </>

@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="page" style={{ paddingBottom: showTabBar ? 64 : 0 }}>
+      <div className="page" style={{ paddingBottom: showTabBar ? 96 : 0 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/category" element={<Category />} />

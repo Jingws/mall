@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import NavBar from '../components/NavBar'
+import Icon from '../components/Icon'
 import { showToast } from '../components/Toast'
 import { useCart } from '../store/CartContext'
 import type { AddressEntry } from '../store/CartContext'
@@ -49,14 +50,18 @@ export default function Addresses() {
 
   return (
     <div className="addr-manage-page">
-      <NavBar title={returnTo ? '选择收货地址' : '收货地址管理'} back={true} />
+      <NavBar
+        title={returnTo ? 'Pick Address' : 'Address Book'}
+        back={true}
+      />
 
       {addresses.length === 0 ? (
         <div className="addr-empty">
-          <div className="addr-empty-emoji">📭</div>
-          <div className="addr-empty-title">还没有收货地址</div>
+          <div className="addr-empty-emoji">
+            <Icon name="location" size={32} />
+          </div>
+          <div className="addr-empty-title">// no_addr.found</div>
           <div className="addr-empty-sub">先创建一个，才能继续下单。</div>
-          <div className="addr-empty-hint">点击页面底部“新增”创建地址</div>
         </div>
       ) : (
         <div className="addr-list">
@@ -69,7 +74,9 @@ export default function Addresses() {
               >
                 <div className="addr-card-top">
                   <div className="addr-recipient">
-                    <span className="addr-pin">📍</span>
+                    <span className="addr-pin">
+                      <Icon name="location" size={16} />
+                    </span>
                     <span className="addr-name">{a.name}</span>
                   </div>
                   <div className="addr-phone">{a.phone}</div>
@@ -90,7 +97,7 @@ export default function Addresses() {
                     showToast('已删除')
                   }}
                 >
-                  删除
+                  delete
                 </button>
               </div>
             </div>
@@ -100,10 +107,9 @@ export default function Addresses() {
 
       <div className="addr-bottom-bar">
         <button className="primary-btn addr-bottom-btn" onClick={createNew}>
-          新增收货地址
+          create address
         </button>
       </div>
     </div>
   )
 }
-
